@@ -101,7 +101,7 @@ const (
 func WalkingSpentCalories(action int, duration, weight, height float64) float64 {
 	// ваш код здесь
 	sqrtSpeed := meanSpeed(action, duration) * meanSpeed(action, duration) * kmhInMsec
-	return ((walkingCaloriesWeightMultiplier*weight + (sqrtSpeed/height)*walkingSpeedHeightMultiplier*weight) * duration * minInH)
+	return (walkingCaloriesWeightMultiplier*weight + (sqrtSpeed/(height/cmInM))*walkingSpeedHeightMultiplier*weight*duration*minInH)
 }
 
 // Константы для расчета калорий, расходуемых при плавании.
@@ -134,12 +134,12 @@ func swimmingMeanSpeed(lengthPool, countPool int, duration float64) float64 {
 // weight float64 — вес пользователя.
 func SwimmingSpentCalories(lengthPool, countPool int, duration, weight float64) float64 {
 	// ваш код здесь
-	return (swimmingMeanSpeed(lengthPool, countPool, duration) + swimmingCaloriesMeanSpeedShift) * swimmingCaloriesWeightMultiplier * weight * duration
+	return (swimmingCaloriesMeanSpeedShift + (swimmingMeanSpeed(lengthPool, countPool, duration) * swimmingCaloriesWeightMultiplier)) * weight * duration
 }
 
 func main() {
 	countActions := 10000
-	typeAction := "Плавание"
+	typeAction := "Ходьба"
 	time := 2.00
 	weight := 85.00
 	height := 190.00
