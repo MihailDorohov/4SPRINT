@@ -81,7 +81,7 @@ const (
 // duration float64 — длительность тренировки в часах.
 func RunningSpentCalories(action int, weight, duration float64) float64 {
 	// ваш код здесь
-	return ((runningCaloriesMeanSpeedMultiplier * meanSpeed(action, duration) * runningCaloriesMeanSpeedShift) * weight / mInKm) * duration * minInH
+	return ((runningCaloriesMeanSpeedMultiplier * meanSpeed(action, duration) * runningCaloriesMeanSpeedShift) * weight / mInKm * duration * minInH)
 }
 
 // Константы для расчета калорий, расходуемых при ходьбе.
@@ -100,8 +100,8 @@ const (
 // height float64 — рост пользователя.
 func WalkingSpentCalories(action int, duration, weight, height float64) float64 {
 	// ваш код здесь
-	sqrtSpeed := meanSpeed(action, duration) * meanSpeed(action, duration) * kmhInMsec
-	return (walkingCaloriesWeightMultiplier*weight + (sqrtSpeed/(height/cmInM))*walkingSpeedHeightMultiplier*weight*duration*minInH)
+	sqrtSpeed := (meanSpeed(action, duration) * kmhInMsec) * (meanSpeed(action, duration) * kmhInMsec)
+	return ((walkingCaloriesWeightMultiplier*weight + (sqrtSpeed/(height/100))*walkingSpeedHeightMultiplier*weight) * duration * minInH)
 }
 
 // Константы для расчета калорий, расходуемых при плавании.
@@ -121,7 +121,7 @@ func swimmingMeanSpeed(lengthPool, countPool int, duration float64) float64 {
 	if duration == 0 {
 		return 0
 	}
-	return float64(lengthPool) * float64(countPool) / mInKm / duration
+	return (float64(lengthPool) * float64(countPool) / mInKm / duration)
 }
 
 // SwimmingSpentCalories возвращает количество потраченных калорий при плавании.
@@ -134,12 +134,12 @@ func swimmingMeanSpeed(lengthPool, countPool int, duration float64) float64 {
 // weight float64 — вес пользователя.
 func SwimmingSpentCalories(lengthPool, countPool int, duration, weight float64) float64 {
 	// ваш код здесь
-	return (swimmingCaloriesMeanSpeedShift + (swimmingMeanSpeed(lengthPool, countPool, duration) * swimmingCaloriesWeightMultiplier)) * weight * duration
+	return (swimmingCaloriesMeanSpeedShift + swimmingMeanSpeed(lengthPool, countPool, duration)) * swimmingCaloriesWeightMultiplier * weight * duration
 }
 
 func main() {
 	countActions := 10000
-	typeAction := "Ходьба"
+	typeAction := "Бег"
 	time := 2.00
 	weight := 85.00
 	height := 190.00
